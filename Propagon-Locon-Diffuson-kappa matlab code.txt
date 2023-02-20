@@ -1,0 +1,34 @@
+ My  approximate MATLAB pseudo code for diffuson and propagon contribution to thermal conductivity using their respective equation from below by using relaxation time expression and density of states equation below. Assuming values as per my  need and giving  an example with the code:- 
+
+ 
+% Set input parameters
+n = 1e23; % number density of atoms
+T = 300; % temperature (K)
+kb = 1.38e-23; % Boltzmann constant (J/K)
+hbar = 1.05e-34; % reduced Planck constant (J.s)
+v = [1000, 1500, 2000]; % speed of sound for each polarization (m/s)
+theta = v.(hbar./(kbT)).(6pi^2n)^(1/3); % Debye temperature for each polarization
+x = linspace(0, max(theta/T), 1000); % integration range for diffuson contribution
+omega = linspace(0, 2pi*max(v)/min(diff(x)), 1000); % integration range for propagon contribution
+
+% Calculate diffuson contribution
+lambda_diff = (pi/6)^(1/3)kbn^(2/3)sum(v.(T./theta).^2.*...
+arrayfun(@(j) trapz(x, x.^3.*exp(x)./((exp(x)-1).^2)), 1:3));
+
+% Calculate propagon contribution
+A = 1e-50; % relaxation time parameters
+B = 1e-30;
+C = 500;
+d = 1e-8; % film thickness (m)
+tau = 1./(Aomega.^4 + BTomega.^2.exp(-C/T) + 2v./d);
+lambda_prop = (1/3)sum(arrayfun(@(j) trapz(omega, hbaromega....
+v(j)^2.*tau.*Dj(omega, v(j))), 1:3));
+
+% Define phonon density of states
+function D = Dj(omega, vj)
+D = (omega.^2vj)/(2pi^2*vj^3);
+end
+
+% Display results
+disp(['Diffuson contribution: ' num2str(lambda_diff) ' W/m.K']);
+disp(['Propagon contribution: ' num2str(lambda_prop) ' W/m.K']);
